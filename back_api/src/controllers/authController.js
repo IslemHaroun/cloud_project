@@ -3,6 +3,8 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const mailChecker = require("../models/mailChecker.js");
+const dotenv = require("dotenv").config();
+const secretKey = process.env.JWT_SECRET;
 
 // Méthode pour gérer l'authentification
 exports.authenticate = (req, res) => {
@@ -27,11 +29,9 @@ exports.authenticate = (req, res) => {
       }
 
       // Créer et renvoyer le token JWT
-      const token = jwt.sign(
-        { mail: users.mail, id: users.id },
-        "your_secret_key",
-        { expiresIn: "1h" }
-      );
+      const token = jwt.sign({ mail: users.mail, id: users.id }, secretKey, {
+        expiresIn: "1h",
+      });
       res.json({ token });
     });
   });

@@ -2,9 +2,11 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/Users.js");
+const dotenv = require('dotenv').config();
 
-const JWT_SECRET =
-  "eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjoidGVzdCJ9.VZqdmEUz4H4lQWLZOAf7gAOZjJw7Yhyp4WlS3UolSBE";
+
+const secretKey = process.env.JWT_SECRET;
+
 
 exports.register = async (req, res) => {
   const { name, firstName, mail, password, role } = req.body;
@@ -22,7 +24,7 @@ exports.register = async (req, res) => {
       password,
       role
     );
-    const token = jwt.sign({ id: newUser.id, mail }, JWT_SECRET, {
+    const token = jwt.sign({ id: newUser.id, mail }, secretKey, {
       expiresIn: "1h",
     });
     res.status(201).json({ token });
