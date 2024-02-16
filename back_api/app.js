@@ -19,7 +19,7 @@ app.use(express.json());
 app.use("/users", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/newUser", registerRoutes);
-app.use("/addSystem", addSystem);
+app.use("/system", addSystem);
 
 app.get("/", (req, res) => {
   res.send("Bienvenue sur votre API SQLite !");
