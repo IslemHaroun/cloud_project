@@ -5,11 +5,10 @@ const sqlite3 = require("sqlite3").verbose();
 const registerRoutes = require("./src/routes/registerRoute");
 const userRoutes = require("./src/routes/userRoute");
 const authRoutes = require("./src/routes/authRoute");
-
+const addSystem = require("./src/routes/systemRoute");
 // Création de l'application Express
 const app = express();
 const port = 4000;
-
 
 app.use(cors());
 
@@ -20,6 +19,7 @@ app.use(express.json());
 app.use("/users", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/newUser", registerRoutes);
+app.use("/addSystem", addSystem);
 
 app.get("/", (req, res) => {
   res.send("Bienvenue sur votre API SQLite !");
