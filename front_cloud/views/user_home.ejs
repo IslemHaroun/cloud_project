@@ -1,36 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <title>Accueil</title>
     <%- include('../partials/header.ejs') %>
-  </head>
-  <body>
+</head>
+
+<body>
     <%- include('../partials/navbar.ejs') %>
-    <%- include('../partials/loader.ejs') %>
+        <%- include('../partials/loader.ejs') %>
 
 
-    <div class="mt-5 text-center" data-aos="fade-right">
-      <p class="h1 mt-5">Bienvenue USER !</p>
-    </div>
-
-
-
-
-
-    <script>
-        const token = window.localStorage.getItem('token');
-
-        console.log(token);
-    </script>
-    <%- include('../asset/js/token_management.ejs') %>
-    <%- include('../asset/js/route_secure.ejs') %>
-    <%- include('../partials/footer.ejs') %>
+            <div class="mt-5 text-center" data-aos="fade-right">
+                <p class="h1 mt-5">Bienvenue  !</p>
+            </div>
 
 
 
 
 
-  </body>
+
+            <script>
+
+                let user_id = window.localStorage.getItem('id_user');
+                let token = window.localStorage.getItem('token'); 
+
+                fetch(`http://localhost:4000/users/${user_id}`, {
+                    method: "GET",
+                    headers: {
+                        'Authorization': `Bearer ${token}` 
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erreur lors de la requête : ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(userData => {
+                        console.log('Données de l\'utilisateur :', userData);
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la requête :', error.message);
+                    });
+
+
+            </script>
+            <%- include('../asset/js/token_management.ejs') %>
+            <%- include('../asset/js/route_secure.ejs') %>
+            <%- include('../partials/footer.ejs') %>
+</body>
 
 </html>

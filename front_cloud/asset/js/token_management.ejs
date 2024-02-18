@@ -2,9 +2,12 @@
  const token_log = window.localStorage.getItem('token');
     if (!token_log || token_log == null || token_log == undefined || token_log == '') {
         document.getElementById('logout').hidden = true;
+        document.getElementById('setting').hidden = true;
+
     }else
     {
         $("#logout").click(function () {
+            $("#loader1").removeClass("visually-hidden");
             window.localStorage.removeItem('token')
             window.sessionStorage.removeItem('token')
             window.location.href = '/';
@@ -16,7 +19,6 @@
     if (token_log_in) {
         document.getElementById('login').hidden = true;
         document.getElementById('inscription').hidden = true;
-
     }
 
     

@@ -74,6 +74,25 @@
                                     const token = responseData.token;
                                     localStorage.setItem("token", token);
 
+                                    const id_user = responseData.id_user;
+                                    localStorage.setItem("id_user", id_user);
+
+                                    const role = responseData.role;
+                                    localStorage.setItem("role", role);
+
+                                    var mail = responseData.mail;
+                                    localStorage.setItem("mail", mail);
+
+                                    var name = responseData.name;
+                                    localStorage.setItem("name", name);
+
+                                    var firstname = responseData.first_name;
+                                    console.log(firstname);
+                                    localStorage.setItem("firstname", firstname);
+
+                                    var credit =responseData.credit;
+                                    localStorage.setItem("credit", credit);
+
                                     $("#notification_succes_connect")
                                         .removeClass("visually-hidden") 
                                         .fadeIn()
@@ -83,6 +102,9 @@
                                         });
 
                                         setTimeout(function () {
+
+                                        $("#loader1").addClass("visually-hidden");
+
                                         window.location.href = "/user_home"; 
                                     }, 3000);
                                 })
@@ -93,12 +115,13 @@
                                         .fadeIn()
                                         .delay(5000)
                                         .fadeOut(function () {
-                                            $(this).addClass("visually-hidden"); 
+                                        $(this).addClass("visually-hidden"); 
                                     });
+                                    $("#loader1").addClass("visually-hidden");
+
                                     
                                 })
                                 .finally(() => {
-                                    $("#loader1").addClass("visually-hidden");
                                 });
                         });
                     });

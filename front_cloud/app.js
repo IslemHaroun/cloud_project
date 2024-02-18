@@ -13,7 +13,12 @@ app.get('/register', (req, res) => {
     res.render('register');
   });
 
+app.get('/setting', (req, res) => {
+    res.render('setting_acc');
+});
+
 app.get('/user_home', (req, res) => {
+
     res.render('user_home');
   });
 
