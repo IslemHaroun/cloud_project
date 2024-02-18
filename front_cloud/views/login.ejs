@@ -10,8 +10,34 @@
 <body>
    <%- include('../partials/navbar.ejs') %>
 
+   <div class="container w-50" data-aos="zoom-in">
+    <h2 class="text-center mt-5">Formulaire de Connexion</h2>
 
-   
+    <form class="mt-5">
+       
+
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="mail" aria-describedby="emailHelp"
+                placeholder="example@test.com" />
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Mot de passe</label>
+            <input type="password" class="form-control" id="password" />
+            <div id="mail" class="form-text">
+                Never share your password with anyone else.
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-5" id="inscriptionForm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top">
+            Connexion
+        </button>
+        <%- include('../partials/loader.ejs') %>
+    </form>
+</div>
+
+
    <%- include('../partials/footer.ejs') %>
    <%- include('../asset/js/logout.ejs') %>
 
