@@ -1,0 +1,6 @@
+<script>
+    const token_route = window.localStorage.getItem('token');
+    if (!token_route || token_route == null || token_route == undefined || token_route == '') {
+        window.location.href = '/';
+    }
+</script>

@@ -1,0 +1,15 @@
+<script>
+ const token_log = window.localStorage.getItem('token');
+    if (!token_log || token_log == null || token_log == undefined || token_log == '') {
+        document.getElementById('logout').hidden = true;
+    }else
+    {
+        $("#logout").click(function () {
+            window.localStorage.removeItem('token')
+            window.sessionStorage.removeItem('token')
+            window.location.href = '/';
+        })
+        
+    }
+    
+</script>

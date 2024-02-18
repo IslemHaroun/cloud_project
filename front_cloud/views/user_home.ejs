@@ -11,11 +11,23 @@
 
 
     <div class="mt-5 text-center" data-aos="fade-right">
-      <p class="h1 mt-5">Bienvenue chez Cloud Machine !</p>
+      <p class="h1 mt-5">Bienvenue USER !</p>
     </div>
 
-    <%- include('../partials/footer.ejs') %>
+
+
+
+
+    <script>
+        const token = window.localStorage.getItem('token');
+
+        console.log(token);
+    </script>
     <%- include('../asset/js/logout.ejs') %>
+    <%- include('../asset/js/route_secure.ejs') %>
+    <%- include('../partials/footer.ejs') %>
+
+
 
 
 

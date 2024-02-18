@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Inscription</title>
+
+    <%- include('../partials/header.ejs') %>
+</head>
+
+<body>
+    <%- include('../partials/navbar.ejs') %> 
+    <%- include('../partials/notificationCreatAcc_succes.ejs') %>
+    <%- include('../partials/notificationCreatAcc_fail.ejs') %>
+
+                <div class="container w-50" data-aos="zoom-in">
+                    <h2 class="text-center mt-5">Formulaire d'Inscription</h2>
+
+                    <form class="mt-5">
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">Nom</label>
+                            <input type="text" class="form-control" id="name" placeholder="Votre nom" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">Prénom</label>
+                            <input type="text" class="form-control" id="firstname" placeholder="Votre prénom" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="mail" aria-describedby="emailHelp"
+                                placeholder="example@test.com" />
+                            <div id="mail" class="form-text">
+                                We'll never share your email with anyone else.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Mot de passe</label>
+                            <input type="password" class="form-control" id="password" />
+                        </div>
+
+                        <label class="form-check-label mt-3 mb-3" for="exampleRadios1">
+                            Choississez votre plan
+                        </label>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="role" id="role1" value="1" checked />
+                            <label class="form-check-label" for="exampleRadios1">
+                                Standard
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="role" id="role2" value="2" />
+                            <label class="form-check-label" for="exampleRadios2">
+                                Special one Machine
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="role" id="role3" value="3" />
+                            <label class="form-check-label" for="exampleRadios3">
+                                Special two Machine
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mt-5" id="inscriptionForm">
+                            Envoyer
+                        </button>
+                        <%- include('../partials/loader.ejs') %>
+                    </form>
+                </div>
+
+                <script>
+                    $(document).ready(function () {
+                        $("#inscriptionForm").click(function (event) {
+                            event.preventDefault();
+
+                            $("#loader1").removeClass("visually-hidden");
+
+                            var formData = {
+                                name: $("#name").val(),
+                                firstName: $("#firstname").val(),
+                                mail: $("#mail").val(),
+                                password: $("#password").val(),
+                                role: $("input[name=role]:checked").val(),
+                            };
+
+                            fetch("http://localhost:4000/newUser/register", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify(formData),
+                            })
+                                .then((response) => {
+                                    if (!response.ok) {
+                                        return response.json().then((data) => {
+                                            throw new Error(data.message || "Erreur inconnue");
+                                            
+                                        });
+                                       
+                                    }
+                                    return response.json();
+                                })
+                                .then((responseData) => {
+                                    console.log("Réponse du serveur :", responseData);
+                                    const token = responseData.token;
+                                    localStorage.setItem("token", token);
+
+                                    $("#notification_succes")
+                                        .removeClass("visually-hidden") 
+                                        .fadeIn()
+                                        .delay(3000)
+                                        .fadeOut(function () {
+                                            $(this).addClass("visually-hidden"); 
+                                        });
+
+                                        setTimeout(function () {
+                                        window.location.href = "/user_home"; 
+                                    }, 3000);
+                                })
+                                .catch((error) => {
+                                    console.error("Erreur lors de la requête :", error.message);
+                                    $("#notification_fail")
+                                        .removeClass("visually-hidden") 
+                                        .fadeIn()
+                                        .delay(3000)
+                                        .fadeOut(function () {
+                                            $(this).addClass("visually-hidden"); 
+                                    });
+                                    
+                                })
+                                .finally(() => {
+                                    $("#loader1").addClass("visually-hidden");
+                                });
+                        });
+                    });
+                </script>
+
+        <%- include('../asset/js/logout.ejs') %>
+        <%- include('../partials/footer.ejs') %>
+</body>
+
+</html>
