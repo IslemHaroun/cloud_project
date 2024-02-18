@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg bg-body-tertiary p-4">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">Cloud Machine</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -12,10 +12,10 @@
           <li class="nav-item">
             <a class="nav-link" href="/register">Inscription</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/login">Connexion</a>
+          <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Connexion">
+            <a class="nav-link" href="/login" id="login" ><i class="fa-solid fa-power-off" style="color: rgb(19, 231, 72);"></i></a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Deconnexion">
             <a class="nav-link" href="" id="logout"><i class="fa-solid fa-power-off" style="color: red;"></i></a>
           </li>
         </ul>
