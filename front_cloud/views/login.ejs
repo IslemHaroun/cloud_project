@@ -12,8 +12,8 @@
    <%- include('../partials/notifications.ejs') %>
 
 
-   <div class="container w-50" data-aos="zoom-in">
-    <h2 class="text-center mt-5">Formulaire de Connexion</h2>
+<div class="container w-50" data-aos="zoom-in">
+    <h2 class="text-center mt-5 p-5">Formulaire de Connexion</h2>
 
     <form class="mt-5">
        
@@ -50,6 +50,8 @@
                                 password: $("#password").val(),
                             };
 
+                            console.log(formData);
+
                             fetch("http://localhost:4000/auth/login", {
                                 method: "POST",
                                 headers: {
@@ -72,7 +74,7 @@
                                     const token = responseData.token;
                                     localStorage.setItem("token", token);
 
-                                    $("#notification_succes")
+                                    $("#notification_succes_connect")
                                         .removeClass("visually-hidden") 
                                         .fadeIn()
                                         .delay(3000)
@@ -86,10 +88,10 @@
                                 })
                                 .catch((error) => {
                                     console.error("Erreur lors de la requête :", error.message);
-                                    $("#notification_fail")
+                                    $("#notification_fail_connect")
                                         .removeClass("visually-hidden") 
                                         .fadeIn()
-                                        .delay(3000)
+                                        .delay(5000)
                                         .fadeOut(function () {
                                             $(this).addClass("visually-hidden"); 
                                     });
@@ -104,7 +106,7 @@
     </script>
 
    <%- include('../partials/footer.ejs') %>
-   <%- include('../asset/js/logout.ejs') %>
+   <%- include('../asset/js/token_management.ejs') %>
 
 
 </body>
