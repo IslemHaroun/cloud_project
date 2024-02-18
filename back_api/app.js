@@ -11,8 +11,6 @@ const app = express();
 const port = 4000;
 
 app.use(cors());
-
-// Middleware pour parser le corps des requêtes en JSON
 app.use(express.json());
 
 // Routes

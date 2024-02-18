@@ -36,6 +36,18 @@ class User {
       });
     });
   }
+  static getUserById(userId) {
+    return new Promise((resolve, reject) => {
+      // Supposons que vous ayez une méthode db.get() ou similaire pour interagir avec votre base de données
+      db.get("SELECT name, first_name, role, mail, credit FROM users WHERE id = ?", [userId], (err, row) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row);
+        }
+      });
+    });
+  }
 }
 
 module.exports = User;

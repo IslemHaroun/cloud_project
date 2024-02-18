@@ -9,7 +9,6 @@ const secretKey = process.env.JWT_SECRET;
 // Méthode pour gérer l'authentification
 exports.authenticate = (req, res) => {
   const { mail, password } = req.body;
-  console.log(req.body);
   // Vérifier si l'utilisateur existe dans la base de données
   mailChecker.findByEmail(mail, (err, users) => {
     if (err) {
@@ -32,7 +31,7 @@ exports.authenticate = (req, res) => {
       const token = jwt.sign({ mail: users.mail, id: users.id }, secretKey, {
         expiresIn: "1h",
       });
-      res.json({ token });
+      res.json({ token :token, message: "Authentification reussie", id_user: users.id, role: users.role, credit: users.credit, mail: users.mail, name: users.name, first_name: users.first_name });
     });
   });
 };
