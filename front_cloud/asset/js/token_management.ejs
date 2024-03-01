@@ -3,6 +3,8 @@
     if (!token_log || token_log == null || token_log == undefined || token_log == '') {
         document.getElementById('logout').hidden = true;
         document.getElementById('setting').hidden = true;
+        document.getElementById('user_home').hidden = true;
+
 
     }else
     {
@@ -19,6 +21,7 @@
     if (token_log_in) {
         document.getElementById('login').hidden = true;
         document.getElementById('inscription').hidden = true;
+        
     }
 
     
