@@ -20,7 +20,7 @@ app.use("/newUser", registerRoutes);
 app.use("/system", addSystem);
 
 app.get("/", (req, res) => {
-  res.send("Bienvenue sur votre API SQLite !");
+  res.send("<h1 style='color: blue;text-align:center;'>Voulez-vous du pain ? ! Cerculez-donc !</h1>");
 });
 // Démarrage du serveur
 app.listen(port, () => {
