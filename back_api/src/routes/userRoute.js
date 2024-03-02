@@ -9,7 +9,7 @@ router.get('/',jwtMiddleware, userController.getAllUsers);
 
 router.get('/:id',jwtMiddleware, userController.getUserById);
 
-router.put('/:id/update-credit', userController.updateCredit);
+router.put('/:id/update-credit', jwtMiddleware ,userController.updateCredit);
 
 
 module.exports = router;
