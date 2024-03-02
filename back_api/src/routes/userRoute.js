@@ -9,4 +9,5 @@ router.get('/',jwtMiddleware, userController.getAllUsers);
 
 
 router.get('/:id',jwtMiddleware, userController.getUserById);
+
 module.exports = router;

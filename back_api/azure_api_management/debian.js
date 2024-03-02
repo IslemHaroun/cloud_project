@@ -13,8 +13,8 @@ let vmImageInfo=null;
 let nicInfo=null;
 
 //Random number generator for service names and settings
-const resourceGroupName = _generateRandomId("diberry-testrg", randomIds);
-const vmName = _generateRandomId("testvm", randomIds);
+const resourceGroupName = _generateRandomId("cloudmachine-debian", randomIds);
+const vmName = _generateRandomId("debian-vm", randomIds);
 const storageAccountName = _generateRandomId("testac", randomIds);
 const vnetName = _generateRandomId("testvnet", randomIds);
 const subnetName = _generateRandomId("testsubnet", randomIds);
@@ -29,9 +29,9 @@ const location = "eastus";
 const accType = "Standard_LRS";
 
 // Ubuntu config for VM
-const publisher = "Canonical";
-const offer = "UbuntuServer";
-const sku = "14.04.3-LTS";
+const publisher = "Debian";
+const offer = "Debian-11";
+const sku = "11";
 const adminUsername = "notadmin";
 const adminPassword = "Pa$$w0rd92";
 
