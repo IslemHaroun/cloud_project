@@ -30,6 +30,21 @@ module.exports = {
     }
   },
 
+  updateCredit: async (req, res) => {
+    const userId = req.params.id; 
+    const newCredit = req.body.newCredit; 
+
+    try {
+
+        const message = await User.updateCreditUser(userId, newCredit);
+
+        res.status(200).json({ message: message });
+    } catch (error) {
+      
+        res.status(500).json({ message: "Erreur lors de la mise à jour du crédit de l'utilisateur.", error: error });
+    }
+}
+
     
 
 };

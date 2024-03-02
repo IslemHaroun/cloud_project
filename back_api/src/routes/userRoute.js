@@ -7,7 +7,9 @@ const jwtMiddleware = require('../middlewares/jwtMiddleware.js');
 
 router.get('/',jwtMiddleware, userController.getAllUsers);
 
-
 router.get('/:id',jwtMiddleware, userController.getUserById);
+
+router.put('/:id/update-credit', userController.updateCredit);
+
 
 module.exports = router;
