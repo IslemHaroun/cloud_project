@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const path = require('path'); // Ajoutez cette ligne pour importer le module path
+const path = require('path'); 
 const port = 3000;
 
 app.set('view engine', 'ejs');
@@ -31,7 +31,7 @@ app.get('/user_home', (req, res) => {
   })
   .then(userData => {
       const arrayVersion = Object.values(userData);
-      console.log(arrayVersion)
+    //   console.log(arrayVersion)
       res.render('user_home', { data: arrayVersion });
   })
   .catch(error => {

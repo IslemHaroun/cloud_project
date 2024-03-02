@@ -9,48 +9,94 @@
 
 <body>
     <%- include('../partials/navbar.ejs') %>
-    <%- include('../partials/loader.ejs') %>
+        <%- include('../partials/loader.ejs') %>
 
 
             <div class="mt-5 text-center mb-3" data-aos="fade-right">
                 <p class="h1 mt-5" id="welcome"></p>
             </div>
 
-            <div class="mt-5 border border-1 rounded w-25 m-auto p-3" data-aos="zoom-in" data-duration="3000"><p class="text-center m-auto" >Votre solde est de : <br><span id="credit"></span> €</p></div>
+            <div class="mt-5 border border-1 rounded w-25 m-auto p-3" data-aos="zoom-in" data-duration="3000">
+                <p class="text-center m-auto">Votre solde est de : <br><span id="credit"></span> €</p>
+            </div>
 
 
-          <div class="container d-flex  border border-1 rounded mt-5">
+            <div class="container d-flex  border border-1 rounded mt-5">
 
-              <% data[0].forEach(function(element) { %>
-            <div class="container  d-block  flex-wrap mt-5 m-auto p-4 text-justify">
-                    <div class="row">
-                        <div class="card" style="width: 18rem;">
-                            <img src="<%= element.image %>.png" class="card-img-top w-50" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title"><%= element.name %></h5>
-                                <p class="card-text"><%= element.description %></p>
-                                <p><label for="price">Prix</label> <span style="color:green;"><%= element.cout %> €</span></p>
-                                <button class="btn btn-success" value="<%= element.id %>">Lancer</button>
+                <% data[0].forEach(function(element) { %>
+                    <div class="container  d-block  flex-wrap mt-5 m-auto p-4 text-justify">
+                        <div class="row">
+                            <div class="card" style="width: 18rem;">
+                                <img src="<%= element.image %>.png" class="card-img-top w-50" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title name">
+                                        <%= element.name %>
+                                    </h5>
+                                    <p class="card-text">
+                                        <%= element.description %>
+                                    </p>
+                                    <p><label for="price">Prix</label> <span style="color:green;">
+                                            <%= element.cout %> €
+                                        </span></p>
+                                    <button class="btn btn-success start" value="<%= element.id %>">Lancer</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <% }); %>
+                    <% }); %>
 
-          </div>
+            </div>
 
-            
+
 
 
             <script>
 
+                let credit_from_data = 0;
                 let user_id = window.localStorage.getItem('id_user');
-                let token = window.localStorage.getItem('token'); 
+                let token = window.localStorage.getItem('token');
+
+                $(document).ready(function () {
+                    $('.start').click(function () {
+
+                        let system_name = $(this).closest('.card-body').find('.name').text().trim();
+                        console.log(system_name);
+
+                         fetch(`http://localhost:4000/execute-azure/start`, {
+                             method: "POST", 
+                             headers: {
+                                 'Content-Type': 'application/json', 
+                                 'Authorization': `Bearer ${token}` 
+                             },
+                             body: JSON.stringify({ 
+                                 system_name: system_name
+                             })
+                         })
+                             .then(response => {
+                                 if (!response.ok) {
+                                     throw new Error('Erreur lors de la requête.'); 
+                                 }
+                                 return response.json();
+                             })
+                             .then(data => {
+                                 console.log(data);
+                             })
+                             .catch(error => {
+                                 console.error('Erreur:', error); 
+                             });
+
+
+
+                    });
+                });
+
+
+                
 
                 fetch(`http://localhost:4000/users/${user_id}`, {
                     method: "GET",
                     headers: {
-                        'Authorization': `Bearer ${token}` 
+                        'Authorization': `Bearer ${token}`
                     }
                 })
                     .then(response => {
@@ -66,31 +112,31 @@
 
                         $('#welcome').text(`Bonjour ${userData.first_name} ${userData.name}`);
                         $('#credit').text(`${credit_from_data}`);
-                      
+
 
                         let credit = $("#credit").text();
                         credit = Number(credit);
-                       
-                        if(credit <= 0){
+
+                        if (credit <= 0) {
                             $("#credit").css("color", "red");
-                        }else if(credit <= 10){
+                        } else if (credit <= 10) {
                             $("#credit").css("color", "orange");
-                        }else{
+                        } else {
                             $("#credit").css("color", "green");
                         }
-                        
+
 
                     })
 
                     .catch(error => {
                         console.error('Erreur lors de la requête :', error.message);
                     });
-                    
+
 
             </script>
             <%- include('../asset/js/token_management.ejs') %>
-            <%- include('../asset/js/route_secure.ejs') %>
-            <%- include('../partials/footer.ejs') %>
+                <%- include('../asset/js/route_secure.ejs') %>
+                    <%- include('../partials/footer.ejs') %>
 </body>
 
 </html>
