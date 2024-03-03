@@ -2,7 +2,7 @@
 
 ## Description
 
-L'application Cloud Machine est une plateforme web pour gérer des machines virtuelles dans le cloud. Elle comprend un backend développé avec Node.js et Express, ainsi qu'un frontend réalisé avec React.
+L'application Cloud Machine est une plateforme web pour gérer des machines virtuelles dans le cloud. Elle comprend un backend développé avec Node.js et Express, ainsi qu'un frontend réalisé avec bootstrap et jquery.
 
 ## Installation
 
