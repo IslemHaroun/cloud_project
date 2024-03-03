@@ -208,6 +208,10 @@ const createVirtualMachine = async(nicId, vmImageVersionNumber)=> {
       ]
     }
   };
+  publicIdADress = await networkClient.publicIPAddresses.get(resourceGroupName, publicIPName);
+  console.log("\n8-------------------------------------------------------------------");
+  console.log(publicIdADress);
+  console.log("-------------------------------------------------------------------");
   console.log('6.Creating Virtual Machine: ' + vmName);
   console.log(' VM create parameters: ' + util.inspect(vmParameters, { depth: null }));
   await computeClient.virtualMachines.beginCreateOrUpdateAndWait(resourceGroupName, vmName, vmParameters);

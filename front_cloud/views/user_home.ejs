@@ -9,11 +9,12 @@
 
 <body>
     <%- include('../partials/navbar.ejs') %>
-        <%- include('../partials/loader.ejs') %>
+        <%- include('../partials/notifications.ejs') %>
 
 
-            <div class="mt-5 text-center mb-3" data-aos="fade-right">
-                <p class="h1 mt-5" id="welcome"></p>
+
+            <div class="mt-5 text-center mb-3 m-5" data-aos="fade-right">
+                <p class="h1 mt-5" id="welcome" style="margin-top: 150px!important;"></p>
             </div>
 
             <div class="mt-5 border border-1 rounded w-25 m-auto p-3" data-aos="zoom-in" data-duration="3000">
@@ -45,98 +46,272 @@
                     </div>
                     <% }); %>
 
-            </div>
+            </div> <%- include('../partials/loader.ejs') %>
+
+                <hr>
+
+                <div class="container">
+                    <h4>Liste de vos machines en cours</h4>
+                    <p>Connecter vous en ssh à l'aide des informations ci-dessous</p>
+                    <table class="table table-hover mt-3" id="vm_table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Login</th>
+                                <th scope="col">Password</th>
+                                <th scope="col">Ip</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row"></th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                    </table>
+                </div>
 
 
 
 
-            <script>
-
-                let credit_from_data = 0;
-                let user_id = window.localStorage.getItem('id_user');
-                let token = window.localStorage.getItem('token');
-
-                $(document).ready(function () {
-                    $('.start').click(function () {
-
-                        let system_name = $(this).closest('.card-body').find('.name').text().trim();
-                        console.log(system_name);
-
-                         fetch(`http://localhost:4000/execute-azure/start`, {
-                             method: "POST", 
-                             headers: {
-                                 'Content-Type': 'application/json', 
-                                 'Authorization': `Bearer ${token}` 
-                             },
-                             body: JSON.stringify({ 
-                                 system_name: system_name
-                             })
-                         })
-                             .then(response => {
-                                 if (!response.ok) {
-                                     throw new Error('Erreur lors de la requête.'); 
-                                 }
-                                 return response.json();
-                             })
-                             .then(data => {
-                                 console.log(data);
-                             })
-                             .catch(error => {
-                                 console.error('Erreur:', error); 
-                             });
 
 
+                <script>
 
+                    let credit_from_data = 0;
+                    let user_id = window.localStorage.getItem('id_user');
+                    let token = window.localStorage.getItem('token');
+                    let credit_user = window.localStorage.getItem('credit');
+                    const price = 10;
+                    console.log(credit_user);
+
+                    $(document).ready(function () {
+
+                        $('.start').click(function () {
+                            if (credit_user >= 10) {
+                                $("#loader1").removeClass("visually-hidden");
+                                $(".start").attr("disabled", true);
+
+                                newCredit = credit_user - price;
+                                console.log(newCredit);
+                                let system_name = $(this).closest('.card-body').find('.name').text().trim();
+                                console.log(system_name);
+
+                                fetch(`http://localhost:4000/execute-azure/start`, {
+                                    method: "POST",
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': `Bearer ${token}`
+                                    },
+                                    body: JSON.stringify({
+                                        system_name: system_name
+                                    })
+                                })
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error('Erreur lors de la requête.');
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        console.log(data);
+                                        succes = data.stdout;
+                                        console.log(succes);
+
+
+                                        const regex = /computerName:\s*'([^']+)',\s*adminUsername:\s*'([^']+)',\s*adminPassword:\s*'([^']+)'/;
+                                        const regex_ip = /fqdn:\s'([^']*)'/;
+                                        const match_ip = succes.match(regex_ip);
+                                        const match = succes.match(regex);
+
+                                        const computerName = match[1];
+                                        const adminUsername = match[2];
+                                        const adminPassword = match[3];
+                                        const ip = match_ip[1];
+
+                                        console.log("Computer Name:", computerName);
+                                        console.log("Admin Username:", adminUsername);
+                                        console.log("Admin Password:", adminPassword);
+                                        console.log("IP:", ip);
+
+                                        fetch(`http://localhost:4000/vmuser/insert-info-vm`, {
+                                            method: "POST",
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': `Bearer ${token}`
+                                            },
+                                            body: JSON.stringify({
+                                                name: computerName,
+                                                login: adminUsername,
+                                                password: adminPassword,
+                                                id_user: user_id,
+                                                ip: ip
+                                            })
+                                        })
+                                            .then(response => {
+                                                if (!response.ok) {
+                                                    throw new Error('Erreur lors de la requête.');
+                                                }
+                                                return response.json();
+                                            })
+                                            .then(data => {
+                                                console.log(data);
+                                            })
+                                            .catch(error => {
+                                                console.error('Erreur:', error);
+                                            });
+
+                                        $("#loader1").addClass("visually-hidden");
+                                        $(".start").attr("disabled", false);
+
+                                        $("#succes_vm_start")
+                                            .removeClass("visually-hidden")
+                                            .fadeIn()
+                                            .delay(3000)
+                                            .fadeOut(function () {
+                                                $(this).addClass("visually-hidden");
+                                            });
+
+                                        setTimeout(function () {
+//REVOIR LA REDIRECTION AJOUTER UN CHMAP DATE
+
+                                            window.location.href = "/user_home";
+                                        }, 3000);
+                                    })
+                                    .catch(error => {
+                                        console.error('Erreur:', error);
+                                    });
+
+
+                                fetch(`http://localhost:4000/users/${user_id}/update-credit`, {
+                                    method: "PUT",
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': `Bearer ${token}`
+                                    },
+                                    body: JSON.stringify({
+                                        newCredit: newCredit
+                                    })
+                                })
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error('Erreur lors de la requête.');
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        console.log(data);
+                                        $("#credit").text(newCredit);
+                                    })
+                                    .catch(error => {
+                                        console.error('Erreur:', error);
+                                    });
+
+
+                            } else {
+                                alert("Vous n'avez pas assez de crédit");
+                            }
+
+                        });
                     });
-                });
 
 
-                
 
-                fetch(`http://localhost:4000/users/${user_id}`, {
-                    method: "GET",
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Erreur lors de la requête : ' + response.statusText);
+
+                    fetch(`http://localhost:4000/users/${user_id}`, {
+                        method: "GET",
+                        headers: {
+                            'Authorization': `Bearer ${token}`
                         }
-                        return response.json();
                     })
-                    .then(userData => {
-                        console.log('Données de l\'utilisateur :', userData);
-                        credit_from_data = userData.credit;
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Erreur lors de la requête : ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then(userData => {
+                            console.log('Données de l\'utilisateur :', userData);
+                            credit_from_data = userData.credit;
 
 
-                        $('#welcome').text(`Bonjour ${userData.first_name} ${userData.name}`);
-                        $('#credit').text(`${credit_from_data}`);
+                            $('#welcome').text(`Bonjour ${userData.first_name} ${userData.name}`);
+                            $('#credit').text(`${credit_from_data}`);
 
 
-                        let credit = $("#credit").text();
-                        credit = Number(credit);
 
-                        if (credit <= 0) {
-                            $("#credit").css("color", "red");
-                        } else if (credit <= 10) {
-                            $("#credit").css("color", "orange");
-                        } else {
-                            $("#credit").css("color", "green");
+                            let credit = $("#credit").text();
+                            credit = Number(credit);
+
+                            localStorage.setItem("credit", credit);
+
+                            if (credit <= 0) {
+                                $("#credit").css("color", "red");
+                                $(".start").addClass("disabled");
+                            } else if (credit == 10) {
+                                $("#credit").css("color", "orange");
+                            } else if (credit < 10) {
+                                $("#credit").css("color", "blue");
+                                $(".start").addClass("disabled");
+                            } else {
+                                $("#credit").css("color", "green");
+                            }
+
+
+                        })
+
+                        .catch(error => {
+                            console.error('Erreur lors de la requête :', error.message);
+                        });
+
+                    fetch(`http://localhost:4000/vmuser/${user_id}/get-info-vm`, {
+                        method: "GET",
+                        headers: {
+                            'Authorization': `Bearer ${token}`
                         }
-
-
                     })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Erreur lors de la requête : ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then(vmData => {
+                            const array_liste_vm = Object.values(vmData);
+                            console.log(array_liste_vm);
 
-                    .catch(error => {
-                        console.error('Erreur lors de la requête :', error.message);
-                    });
+
+                            const tableBody = document.getElementById('vm_table').getElementsByTagName('tbody')[0];
+
+                            array_liste_vm.forEach((vm, index) => {
+                                // Crée une nouvelle ligne pour chaque VM
+                                const newRow = tableBody.insertRow();
+
+                                // Insère le numéro de la ligne
+                                const cellNum = newRow.insertCell(0);
+                                cellNum.textContent = index + 1;
+
+                                // Remplit les cellules avec les valeurs de la VM
+                                newRow.insertCell(1).textContent = vm.name; // Nom de la machine
+                                newRow.insertCell(2).textContent = vm.login; // Nom d'utilisateur
+                                newRow.insertCell(3).textContent = vm.password; // Mot de passe
+                                newRow.insertCell(4).textContent = vm.ip; // Ajoutez ici l'adresse IP si nécessaire
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Erreur lors de la requête :', error.message);
+                            res.status(500).send('Erreur lors de la récupération des données');
+                        });
 
 
-            </script>
-            <%- include('../asset/js/token_management.ejs') %>
-                <%- include('../asset/js/route_secure.ejs') %>
-                    <%- include('../partials/footer.ejs') %>
+                </script>
+                <%- include('../asset/js/token_management.ejs') %>
+                    <%- include('../asset/js/route_secure.ejs') %>
+                        <%- include('../partials/footer.ejs') %>
 </body>
 
 </html>
